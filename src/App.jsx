@@ -36,7 +36,7 @@ export default function Meme() {
       setTopTextBg("#000");
     } else if (name === "bottomText") {
       setBottomTextBg("#000");
-    } else return;
+    }
   };
 
   const handleGetMeme = () => {
@@ -68,53 +68,82 @@ export default function Meme() {
       downloadLinkRef.current.href = canvas.toDataURL("image/png");
     };
   }, [meme]);
+
   return (
     <main>
       <Header />
-      <section className="form">
-        <div>
-          <label htmlFor="topText">Top text</label>
-          <input
-            type="text"
-            id="topText"
-            name="topText"
-            value={meme.topText}
-            onChange={(e) => handleChange(e)}
-          />
+      <div className="bg-blue-200 min-h-screen flex flex-col justify-center items-center p-4">
+        <div className="flex flex-col justify-center items-center space-y-6">
+          <section className="form flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4 bg-white p-6 rounded-lg shadow-lg">
+            <div className="flex flex-col items-center">
+              <label htmlFor="topText" className="font-semibold mb-2">
+                Top Text
+              </label>
+              <input
+                type="text"
+                id="topText"
+                name="topText"
+                value={meme.topText}
+                onChange={(e) => handleChange(e)}
+                className="w-full p-2 border-2 border-gray-300 rounded focus:outline-none focus:border-blue-400"
+              />
+            </div>
+
+            <div className="flex flex-col items-center">
+              <label htmlFor="bottomText" className="font-semibold mb-2">
+                Bottom Text
+              </label>
+              <input
+                type="text"
+                id="bottomText"
+                name="bottomText"
+                value={meme.bottomText}
+                onChange={(e) => handleChange(e)}
+                className="w-full p-2 border-2 border-gray-300 rounded focus:outline-none focus:border-blue-400"
+              />
+            </div>
+          </section>
+
+          <button
+            type="submit"
+            onClick={handleGetMeme}
+            className="bg-blue-500 text-black text-xl text-semibold p-4 rounded hover:bg-blue-600 transition duration-200 w-full"
+          >
+            Get a new meme image
+          </button>
+
+          <section className="meme relative mt-8 flex flex-col items-center">
+            <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+            <img
+              src={meme.randomImg}
+              alt=""
+              className="w-full max-w-lg border-4 border-gray-300 rounded-lg shadow-lg"
+            />
+            <h2
+              className="top-text absolute mt-12  left-1/2 transform -translate-x-1/2 text-3xl font-bold text-white"
+              style={{ backgroundColor: topTextBg }}
+            >
+              {meme.topText}
+            </h2>
+            <h2
+              className="bottom-text absolute mb-12 bottom-2 left-1/2 transform -translate-x-1/2 text-3xl font-bold text-white"
+              style={{ backgroundColor: bottomTextBg }}
+            >
+              {meme.bottomText}
+            </h2>
+          </section>
+
+          <button className="download-btn flex items-center space-x-2 bg-blue-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">
+            <a
+              ref={downloadLinkRef}
+              download="meme.png"
+              className="font-semibold"
+            >
+              Download Meme
+            </a>
+          </button>
         </div>
-
-        <div>
-          <label htmlFor="bottomText">Bottom text</label>
-          <input
-            type="text"
-            id="bottomText"
-            name="bottomText"
-            value={meme.bottomText}
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-        <button type="submit" onClick={handleGetMeme}>
-          Get a new meme image 🖼️
-        </button>
-      </section>
-
-      <section className="meme">
-        <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-        <img src={meme.randomImg} alt="" />
-        <h2 className="top-text" style={{ backgroundColor: topTextBg }}>
-          {meme.topText}
-        </h2>
-        <h2 className="bottom-text" style={{ backgroundColor: bottomTextBg }}>
-          {meme.bottomText}
-        </h2>
-      </section>
-
-      <button className="dowmload-btn">
-        <img src="/download-icon.svg" alt="download-meme" />
-        <a ref={downloadLinkRef} download="meme.png" className="download-icon">
-          Download Meme
-        </a>
-      </button>
+      </div>
     </main>
   );
 }
